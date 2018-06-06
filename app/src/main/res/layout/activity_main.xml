@@ -12,24 +12,34 @@
         android:background="#F00">
     </com.my.flowlayout.TagLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:onClick="rotateyAnimRun"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/linear1"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:text="ddddd"/>
+        </RelativeLayout>
 
         <ImageView
             android:id="@+id/id_ball"
-            android:layout_width="150dp"
+            android:layout_toRightOf="@+id/linear1"
+            android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
             android:scaleType="centerCrop"
-            android:gravity="center_vertical"
             android:background="@drawable/my3"
             />
-    </LinearLayout>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/cesi"

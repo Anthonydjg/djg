@@ -9,17 +9,20 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
     TagLayout mFlowLayout;
     String[] tags = new String[]{"别人家孩子作业做到转钟", "别人家孩子周末都在家学习", "成天就知道玩游戏", "别人上清华了", "比你优秀的人还比你勤奋", "我怎么教出你这么个不争气的败家子", "因为你是小明？"};
 
-    private LinearLayout linear;
+    private RelativeLayout linear, linear1;
     private ImageView id_ball;
     private Button cesi;
 
@@ -42,14 +45,15 @@ public class MainActivity extends Activity {
             mFlowLayout.addView(tv);
         }
 
-        linear = (LinearLayout) findViewById(R.id.linear);
+        linear = (RelativeLayout) findViewById(R.id.linear);
+        linear1 = (RelativeLayout) findViewById(R.id.linear1);
         id_ball = (ImageView) findViewById(R.id.id_ball);
         cesi = (Button) findViewById(R.id.cesi);
         cesi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(MainActivity.this,VacationHomeActivity.class);
+                Intent intent = new Intent(MainActivity.this, VacationHomeActivity.class);
                 MainActivity.this.startActivity(intent);
             }
         });
@@ -122,63 +126,117 @@ public class MainActivity extends Activity {
 //            }
 //        });
 
-        //缩小
-        ObjectAnimator anim1 = ObjectAnimator.ofFloat(linear, "scaleX",
-                1.0f, 0.8f);
-//        anim1.setDuration(500);
-//        anim1.start();
+        final int width = CommonUtil.dp2px(this, 30);
+        ObjectAnimator anim1 = ObjectAnimator.ofFloat(linear1, "translationX",
+                0f, -width);
+        ViewGroup.LayoutParams layoutParams2 = id_ball.getLayoutParams();
+        final RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams(layoutParams2);
+
+        ViewGroup.LayoutParams layoutParams1 = linear1.getLayoutParams();
+        final RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(layoutParams1);
+
         anim1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                float cVal = (Float) animation.getAnimatedValue();
-                view.setAlpha(cVal);
+                float cVal = (float) animation.getAnimatedValue();
+                params2.leftMargin = width + (int) cVal;
+                id_ball.setLayoutParams(params2);
+
+//                params1.leftMargin = (int) cVal;
+//                linear1.setLayoutParams(params1);
+//                System.out.println("params1.leftMargin------->"+params1.leftMargin);
             }
         });
-        ObjectAnimator anim2 = ObjectAnimator.ofFloat(linear, "scaleX",
-                0.8f, 1);
+        anim1.setDuration(500);
+//        anim1.start();
+
+        ObjectAnimator anim2 = ObjectAnimator.ofFloat(linear1, "translationX",
+                -width, 0);
+
         anim2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                float cVal = (Float) animation.getAnimatedValue();
-                view.setAlpha(cVal);
+                float cVal = (float) animation.getAnimatedValue();
+                System.out.println("cVal----->"+cVal+"  "+params1.leftMargin);
+                params2.leftMargin = width + (int) cVal;
+                id_ball.setLayoutParams(params2);
+
+//                int ledt = (int)(cVal - width);
+//                System.out.println("ledt--------->"+ledt);
+//                params1.leftMargin = ledt;
+//                linear1.setLayoutParams(params1);
             }
         });
-        anim2.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                if (!flag) {
-                    id_ball.setImageResource(R.drawable.my2);
-                    flag = true;
-                } else {
-                    id_ball.setImageResource(R.drawable.my3);
-                    flag = false;
-                }
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
+        anim2.setDuration(500);
+//        anim1.start();
         AnimatorSet animSet = new AnimatorSet();
-        animSet.setDuration(500);
+//        animSet.setDuration(1000);
         animSet.setInterpolator(new LinearInterpolator());
-        //两个动画同时执行
-//        animSet.playTogether(anim1, anim2);
-        //一个一个的执行动画
         animSet.playSequentially(anim1, anim2);
         animSet.start();
+//        AnimatorSet animSet = new AnimatorSet();
+//        animSet.setDuration(500);
+//        animSet.setInterpolator(new LinearInterpolator());
+//        //两个动画同时执行
+//        animSet.playTogether(anim1, anim2);
+
+        //缩小
+//        ObjectAnimator anim1 = ObjectAnimator.ofFloat(linear, "scaleX",
+//                1.0f, 0.8f);
+////        anim1.setDuration(500);
+////        anim1.start();
+//        anim1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                float cVal = (Float) animation.getAnimatedValue();
+//                view.setAlpha(cVal);
+//            }
+//        });
+//        ObjectAnimator anim2 = ObjectAnimator.ofFloat(linear, "scaleX",
+//                0.8f, 1);
+//        anim2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animation) {
+//                float cVal = (Float) animation.getAnimatedValue();
+//                view.setAlpha(cVal);
+//            }
+//        });
+//        anim2.addListener(new Animator.AnimatorListener() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//                if (!flag) {
+//                    id_ball.setImageResource(R.drawable.my2);
+//                    flag = true;
+//                } else {
+//                    id_ball.setImageResource(R.drawable.my3);
+//                    flag = false;
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationCancel(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animator animation) {
+//
+//            }
+//        });
+//        AnimatorSet animSet = new AnimatorSet();
+//        animSet.setDuration(500);
+//        animSet.setInterpolator(new LinearInterpolator());
+//        //两个动画同时执行
+////        animSet.playTogether(anim1, anim2);
+//        //一个一个的执行动画
+//        animSet.playSequentially(anim1, anim2);
+//        animSet.start();
 
 //        ScaleAnimation animation =new ScaleAnimation(1f, 1f, 1f, 0f,
 //                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
